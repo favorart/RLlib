@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
                 state = next;
                 ++step;
             }
-            catch(rl::exception::Terminal& e) { 
+            catch(rl::exception::Terminal&) { 
                 learner.learn(state, action, simulator.reward());
                 break;
             }
@@ -99,7 +99,7 @@ int main(int argc, char* argv[]) {
                 state = simulator.sense();
                 ++step;
             }
-            catch(rl::exception::Terminal& e) { 
+            catch(rl::exception::Terminal&) { 
                 break;
             }
         }

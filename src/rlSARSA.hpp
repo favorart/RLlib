@@ -48,22 +48,16 @@ namespace rl {
 	     typename fctQ_PARAMETRIZED,
 	     typename fctGRAD_Q_PARAMETRIZED>
     class SARSA : public TD<STATE,ACTION> {
+        SARSA() {}
 
     public:
-
-      typedef TD<STATE,ACTION> super_type;
-      
-    private:
-
-      SARSA(void) {}
-      
-    public:
+      using super_type = TD<STATE, ACTION>;
 
       SARSA(gsl_vector* param,
 	    double gamma_coef,
 	    double alpha_coef,
-	    const fctQ_PARAMETRIZED& fct_q,
-	    const fctGRAD_Q_PARAMETRIZED& fct_grad_q)
+	    /*const*/ fctQ_PARAMETRIZED& fct_q,
+	    /*const*/ fctGRAD_Q_PARAMETRIZED& fct_grad_q)
 	: super_type(param,
 		     gamma_coef,alpha_coef,
 		     fct_q,

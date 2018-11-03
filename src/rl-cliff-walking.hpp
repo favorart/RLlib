@@ -153,7 +153,8 @@ namespace rl {
 	  std::ostringstream filename;
 	  unsigned char img[drawingWidth*drawingHeight*3];
 	  phase_type p;
-	  int i,size,dim_size;
+      //int i;
+      int size, dim_size;
 	  int w,h;
 	  unsigned char value;
 	  unsigned char* rgb;
@@ -208,7 +209,8 @@ namespace rl {
 	  std::ostringstream filename;
 	  unsigned char img[drawingWidth*drawingHeight*3];
 	  phase_type p;
-	  int i,size,dim_size;
+      //int i;
+      int size, dim_size;
 	  int w,h;
 	  unsigned char value;
 	  unsigned char* rgb;

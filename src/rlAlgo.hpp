@@ -152,7 +152,7 @@ namespace rl {
     enumerator() : j(0) {}
     enumerator(const enumerator& cp) : j(cp.j) {}
     enumerator(T i) : j(static_cast<int>(i)) {}
-    enumerator<T>& operator=(T i) {j=i; return *this;}
+    enumerator<T>& operator=(T i) {j=static_cast<int>(i); return *this;}
     enumerator<T>& operator=(const enumerator<T>& cp) {j=cp.j; return *this;}
     enumerator<T>& operator++() {++j; return *this;}
     enumerator<T>& operator--() {--j; return *this;}

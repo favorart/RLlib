@@ -64,10 +64,20 @@ namespace rl {
                         const ACTION_ITERATOR& action_begin,
                         const ACTION_ITERATOR& action_end,
                         RANDOM_GENERATOR& gen) {
-                    return [&gen,q_function,&epsilon,action_begin,action_end](const auto& s) -> typename std::remove_reference<decltype(*action_begin)>::type {
+                      return [&gen, q_function, &epsilon, action_begin, action_end](const auto& s)
+#ifdef WIN32
+                     -> A
+#else
+                     -> typename std::remove_reference<decltype(*action_begin)>::type
+#endif
+                    {
                         std::bernoulli_distribution dis(epsilon);
-                        if(dis(gen)) { 
+                        if(dis(gen)) {
+#ifndef WIN32
+                            A selected_value;
+#else
                             typename std::remove_reference<decltype(*action_begin)>::type selected_value;
+#endif
                             std::sample(action_begin, action_end, &selected_value, 1, gen);
                             return selected_value;
                         }
@@ -84,10 +94,13 @@ namespace rl {
                     const ACTION_ITERATOR& action_end,
                     RANDOM_GENERATOR& gen) {
                 return [&gen, action_begin, action_end](const auto& s) {
+#ifdef WIN32
+                    A selected_value;
+#else
                     typename std::remove_reference<decltype(*action_begin)>::type selected_value;
+#endif
                     std::sample(action_begin, action_end, &selected_value, 1, gen);
                     return selected_value;
-
                 };
             }
 

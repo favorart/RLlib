@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{60B90D37-80BA-3F7C-A992-46E1D13CD8B5}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>Win32</Platform>
+    <ProjectName>ALL_BUILD</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Utility</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\MinGW\include;</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/favorart/Documents/Github/RLlib-4.0.0 -BC:/Users/favorart/Documents/Github/RLlib-4.0.0/bin --check-stamp-file C:/Users/favorart/Documents/Github/RLlib-4.0.0/bin/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCCompiler.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/favorart/Documents/Github/RLlib-4.0.0 -BC:/Users/favorart/Documents/Github/RLlib-4.0.0/bin --check-stamp-file C:/Users/favorart/Documents/Github/RLlib-4.0.0/bin/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCCompiler.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/favorart/Documents/Github/RLlib-4.0.0 -BC:/Users/favorart/Documents/Github/RLlib-4.0.0/bin --check-stamp-file C:/Users/favorart/Documents/Github/RLlib-4.0.0/bin/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCCompiler.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -HC:/Users/favorart/Documents/Github/RLlib-4.0.0 -BC:/Users/favorart/Documents/Github/RLlib-4.0.0/bin --check-stamp-file C:/Users/favorart/Documents/Github/RLlib-4.0.0/bin/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:/Users/favorart/Documents/Github/RLlib-4.0.0/CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInitialize.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCCompiler.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeCXXCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\WindowsPaths.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-C.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\3.10.1\CMakeRCCompiler.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPkgConfig.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageHandleStandardArgs.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\FindPackageMessage.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPack.cmake;C:\Program Files\CMake\share\cmake-3.10\Modules\CPackComponent.cmake;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Program Files\CMake\share\cmake-3.10\Templates\CPackConfig.cmake.in;C:\Users\favorart\Documents\Github\RLlib-4.0.0\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\ZERO_CHECK.vcxproj">
+      <Project>{117B6DEF-B7D8-3858-9537-8692236B7C1A}</Project>
+      <Name>ZERO_CHECK</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-000-000-overview.vcxproj">
+      <Project>{4E59E101-258B-368E-980E-EF3EEDF91EBF}</Project>
+      <Name>example-000-000-overview</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-000-001-simulator.vcxproj">
+      <Project>{4F36F840-BBDC-35B1-8521-6B3DC516F797}</Project>
+      <Name>example-000-001-simulator</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-000-002-learning.vcxproj">
+      <Project>{941AFED8-45CD-35BF-916D-EB61096F9453}</Project>
+      <Name>example-000-002-learning</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-000-003-agents.vcxproj">
+      <Project>{F3A6A11F-3975-368D-A9A8-6D2667CD9D9C}</Project>
+      <Name>example-000-003-agents</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-001-001-cliff-walking-sarsa.vcxproj">
+      <Project>{7D6AA408-794F-396A-A146-B67C0DAD13AA}</Project>
+      <Name>example-001-001-cliff-walking-sarsa</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-001-002-cliff-walking-qlearning.vcxproj">
+      <Project>{1EFB8B88-4943-3CBC-A343-367C134DC780}</Project>
+      <Name>example-001-002-cliff-walking-qlearning</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-002-001-boyan-lstd.vcxproj">
+      <Project>{CB1A446C-C262-31E2-98B1-CE6172A0E840}</Project>
+      <Name>example-002-001-boyan-lstd</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-002-002-pendulum-lspi.vcxproj">
+      <Project>{9A58964F-E657-3D50-BB54-20DFDEFF13CF}</Project>
+      <Name>example-002-002-pendulum-lspi</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-003-001-pendulum-ktdq.vcxproj">
+      <Project>{5122DDD0-F963-3DE8-83A4-5B949CC86456}</Project>
+      <Name>example-003-001-pendulum-ktdq</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-003-002-pendulum-mlp-ktdq.vcxproj">
+      <Project>{A853A21F-3017-3855-8032-8395B140871C}</Project>
+      <Name>example-003-002-pendulum-mlp-ktdq</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-003-003-mountain-car-ktdsarsa.vcxproj">
+      <Project>{81E092D6-AD34-3BFB-9549-28710C329CC9}</Project>
+      <Name>example-003-003-mountain-car-ktdsarsa</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-003-004-pendulum-onpolicy-LSPI.vcxproj">
+      <Project>{F0815196-A7C1-33D8-8089-CFA360CE681A}</Project>
+      <Name>example-003-004-pendulum-onpolicy-LSPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-004-001-cliff-onestep.vcxproj">
+      <Project>{D70B47E7-DC00-3CD1-BF7C-E988334E29E8}</Project>
+      <Name>example-004-001-cliff-onestep</Name>
+    </ProjectReference>
+    <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\examples\example-004-002-cliff-eligibility.vcxproj">
+      <Project>{18546546-57E3-32B6-9086-C5AF7E710608}</Project>
+      <Name>example-004-002-cliff-eligibility</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

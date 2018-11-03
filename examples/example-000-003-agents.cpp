@@ -72,12 +72,11 @@ class Q {
 
 template<typename QFUNCTION,
     typename ACTION_ITERATOR>
-    void plotQ(std::string title, const QFUNCTION q_function, 
-            const ACTION_ITERATOR& a_begin, 
-            const ACTION_ITERATOR& a_end,
-            std::string filename) {
+    void plotQ(const std::string &title, const QFUNCTION q_function, 
+               const ACTION_ITERATOR& a_begin, 
+               const ACTION_ITERATOR& a_end,
+               const std::string &filename) {
         std::ofstream file;
-
         file.open(filename.c_str());
         if(!file) {
             std::cerr << "Cannot open \"" << filename << "\". Aborting";
@@ -88,7 +87,7 @@ template<typename QFUNCTION,
             << "set yrange [0:1];" << std::endl
             << "set xlabel 'Actions'" << std::endl
             << "plot '-' with lines notitle" << std::endl;
-        S dummy;
+        S dummy{};
         for(auto ait = a_begin; ait != a_end ; ++ait)
             file << *ait << ' ' << q_function(dummy, *ait) << std::endl;
 
@@ -99,7 +98,7 @@ template<typename QFUNCTION,
 #define HISTO_NB_SAMPLES 20000
 
 template<typename POLICY>
-void plot1D(std::string title,const POLICY& policy,std::string filename) {
+void plot1D(const std::string &title,const POLICY &policy, const std::string &filename) {
     std::ofstream file;
 
     file.open(filename.c_str());
@@ -108,14 +107,12 @@ void plot1D(std::string title,const POLICY& policy,std::string filename) {
         return;
     }
 
-    int histogram[NB_ARMS];
-    A a;
-    S dummy;
-    int i;
+    int histogram[NB_ARMS] = {};
+    A a{};
+    S dummy{};
+    int i{};
     double max=0;
 
-    for(a = 0; a < NB_ARMS; ++a)
-        histogram[a] = 0;
     for(i = 0; i < HISTO_NB_SAMPLES; ++i)
         histogram[policy(dummy)]++;
     for(a = 0; a < NB_ARMS; ++a)
@@ -138,17 +135,17 @@ template<typename POLICY>
 void plot2D(POLICY& policy, double& temperature) {
     std::ofstream file;
 
-    file.open("SoftMaxPolicy.plot");
+    file.open("SoftMaxPolicy.plt");
     if(!file) {
-        std::cerr << "Cannot open \"SoftMaxPolicy.plot\". Aborting";
+        std::cerr << "Cannot open \"SoftMaxPolicy.plt\". Aborting";
         return;
     }
 
-    int histogram[NB_ARMS];
-    A a;
-    S dummy;
-    int i;
-    int tpt;
+    int histogram[NB_ARMS] = {};
+    A a{};
+    S dummy{};
+    int i{};
+    int tpt{};
 
     file << "set title 'SoftMax policy action choices';" << std::endl
         << "set xrange [0:" << NB_ARMS-1 << "];" << std::endl
@@ -170,7 +167,7 @@ void plot2D(POLICY& policy, double& temperature) {
     }
 
     file.close();
-    std::cout << "\"SoftMaxPolicy.plot\" generated.                 " << std::endl;
+    std::cout << "\"SoftMaxPolicy.plt\" generated.                 " << std::endl;
 }
 
 int main(int argc, char* argv[]) {
@@ -202,12 +199,12 @@ int main(int argc, char* argv[]) {
             x = a/(double)NB_ARMS;
             q.tabular_values[a] = (1-.2*x)*pow(sin(5*(x+.15)),2);
         }
-        plotQ("Q values", q, a_begin, a_end, "Qvalues.plot");
+        plotQ("Q values", q, a_begin, a_end, "Qvalues.plt");
 
         // Let us plot histograms of policys.
-        plot1D("Random policy choices",random_policy,"RandomPolicy.plot");
-        plot1D("Greedy policy choices",greedy_policy,"GreedyPolicy.plot");
-        plot1D("Epsilon-greedy policy choices",epsilon_greedy_policy,"EpsilonGreedyPolicy.plot");
+        plot1D("Random policy choices",random_policy,"RandomPolicy.plt");
+        plot1D("Greedy policy choices",greedy_policy,"GreedyPolicy.plt");
+        plot1D("Epsilon-greedy policy choices",epsilon_greedy_policy,"EpsilonGreedyPolicy.plt");
 
         plot2D(softmax_policy, temperature);
     }

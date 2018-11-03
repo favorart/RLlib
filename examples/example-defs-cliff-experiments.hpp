@@ -146,7 +146,7 @@ void make_experiment(CRITIC& critic,
 							      action_begin,action_end, gen);
   auto          test_policy      = rl::policy::greedy(q,action_begin,action_end);
   int           episode,frame;
-  int           episode_length;
+  //int           episode_length;
 
   std::array<bool,Cliff::size> visited;
   

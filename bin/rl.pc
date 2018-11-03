@@ -1,0 +1,7 @@
+
+Name: rl
+Description: This is a C++ library for reinforcement learning
+Version: 4.00.00
+Requires: gsl
+Libs: -LC:/Program Files (x86)/rl/lib  -Wl,--no-as-needed 
+Cflags: -IC:/Program Files (x86)/rl/include/rl -std=c++17

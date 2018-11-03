@@ -139,14 +139,13 @@ typedef double      Reward;
 // rl::enumerable if action values were contiguous.
 std::array<A,3> actions = {{'B','O','N'}};
 
-
 // This function shows how to run an episode with the types we have
 // defined so far.
 template<typename RANDOM_GENERATOR>
 void run_episode_version_01(RANDOM_GENERATOR& gen) {
     Simulator simulator;
     Reward sum = 0;
-    auto policy = rl::policy::random(actions.begin(),actions.end(), gen);
+    auto policy = rl::policy::random(actions.begin(), actions.end(), gen);
 
     std::cout << std::endl
         << "Version 01" << std::endl
@@ -157,7 +156,9 @@ void run_episode_version_01(RANDOM_GENERATOR& gen) {
     simulator.setPhase("BONBON");
     try {
         while(true) {
-            simulator.timeStep(policy(simulator.sense()));
+            S s = simulator.sense();
+            A a = policy(s);
+            simulator.timeStep(a);
             sum += simulator.reward();
         }
     }

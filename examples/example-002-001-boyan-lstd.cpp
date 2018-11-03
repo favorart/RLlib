@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
 
   Simulator         simulator(gen);
   TransitionSet     transitions;
-  int               episode_length;
+  //int               episode_length;
   Feature           phi;
   
   gsl_vector* theta = gsl_vector_alloc(phi.dimension());

@@ -51,9 +51,8 @@ namespace rl {
     class TD<STATE> {
 
     public:
-      
-      typedef std::function<double (const gsl_vector*,const STATE&)>           v_type;
-      typedef std::function<void (const gsl_vector*,gsl_vector*,const STATE&)> gv_type;
+      typedef std::function<double(const gsl_vector*,const STATE&)>            v_type;
+      typedef std::function<void(const gsl_vector*,gsl_vector*,const STATE&)> gv_type;
 
     private:
 
@@ -156,56 +155,43 @@ namespace rl {
      */
     template<typename STATE, typename ACTION>
     class TD<STATE, ACTION> {
-
-    public:
-      
-      typedef std::function<double (const gsl_vector*, const STATE&, const ACTION&)>           q_type;
-      typedef std::function<void (const gsl_vector*,gsl_vector*,const STATE&, const ACTION&)> gq_type;
-
-    private:
-
-      TD(void) {}
-
-    protected:
-
-      gsl_vector* theta;
-
-    private:
+      TD() {}
 
       gsl_vector* grad;
 
+    public:
+        typedef std::function<double(const gsl_vector*, const STATE&, const ACTION&)>             q_type;
+        typedef std::function<void(const gsl_vector*, gsl_vector*, const STATE&, const ACTION&)> gq_type;
+
     protected:
-
-
+      gsl_vector * theta;
       q_type  q;
       gq_type gq;
       
       void td_update(const STATE& s, const ACTION& a, double td) {
-	// theta <- theta + alpha*td*grad
-	gq(theta, grad, s, a);
-	gsl_blas_daxpy(td*alpha, grad, theta);
+	      // theta <- theta + alpha*td*grad
+	      gq(theta, grad, s, a);
+	      gsl_blas_daxpy(td*alpha, grad, theta);
       }
 
     public:
+
       double gamma;
       double alpha;
-      template<typename fctQ,
-	       typename fctGRAD_Q>
+
+      template<typename fctQ, typename fctGRAD_Q>
       TD(gsl_vector* param,
-	 double gamma_coef,
-	 double alpha_coef,
-	 const fctQ&      fct_q,
-	 const fctGRAD_Q& fct_grad_q)
-	: theta(param),
-	  grad(gsl_vector_alloc(param->size)),
-	  q(fct_q), gq(fct_grad_q),
-	  gamma(gamma_coef), alpha(alpha_coef) {
-      }
+	     double gamma_coef,
+	     double alpha_coef,
+	     const fctQ&      fct_q,
+	     const fctGRAD_Q& fct_grad_q) : 
+        theta(param),
+	    grad(gsl_vector_alloc(param->size)),
+	    q(fct_q), gq(fct_grad_q),
+	    gamma(gamma_coef), alpha(alpha_coef)
+      {}
 
-      TD(const TD<STATE, ACTION>& cp) {
-	*this = cp;
-      }
-
+      TD(const TD<STATE, ACTION>& cp) { *this = cp; }
 
       TD<STATE, ACTION>& operator=(const TD<STATE, ACTION>& cp) {
 	if(this != &cp) {
@@ -259,8 +245,5 @@ namespace rl {
 			       alpha_coef,
 			       fct_q,fct_grad_q);
     }
-
-
-    
   }
 }

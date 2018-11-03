@@ -1,0 +1,16 @@
+
+*.opendb
+*.db
+*.db-shm
+*.db-wal
+*.tlog
+*.log
+*.exe
+*.obj
+bin/examples/Debug/*
+*.ilk
+*.pdb
+bin/.vs/*
+*.plt
+*.bin
+

@@ -67,8 +67,8 @@ namespace rl {
 		double alpha_coef,
 		const ACTION_ITERATOR& begin,
 		const ACTION_ITERATOR& end,
-		const fctQ_PARAMETRIZED& fct_q,
-		const fctGRAD_Q_PARAMETRIZED& fct_grad_q)
+		/*const*/ fctQ_PARAMETRIZED& fct_q, // Warning C4180: qualifier applied to function type has no meaning; ignored
+		/*const*/ fctGRAD_Q_PARAMETRIZED& fct_grad_q)
 	: super_type(param,
 		     gamma_coef,alpha_coef,
 		     rl::sa::gsl::vparam_of_qparam<STATE,ACTION,double>(fct_q),

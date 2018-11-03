@@ -229,7 +229,7 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
 
             std::string command;
 
-            command = "find . -name \"ktd-*.plot\" -exec gnuplot \\{} \\;";
+            command = "find . -name \"ktd-*.plt\" -exec gnuplot \\{} \\;";
             std::cout << "Executing : " << command << std::endl;
             system(command.c_str());
 
@@ -241,7 +241,7 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
             std::cout << "Executing : " << command << std::endl;
             system(command.c_str());
 
-            command = "find . -name \"ktd-*.plot\" -exec rm \\{} \\;";
+            command = "find . -name \"ktd-*.plt\" -exec rm \\{} \\;";
             std::cout << "Executing : " << command << std::endl;
             system(command.c_str());
 
@@ -261,7 +261,7 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
 
 template<typename RANDOM_GENERATOR>
 void test(const Simulator::phase_type& start, RANDOM_GENERATOR& gen) {
-    int            episode,step,episode_length;
+    //int            episode, step, episode_length;
     std::string    command;
     std::ifstream  file;
 

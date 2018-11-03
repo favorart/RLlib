@@ -100,7 +100,7 @@ namespace rl {
 	     << " : size = " << std::setw(4) << layerSize() << std::endl;
 	}
 
-	Input(const fctFEATURE& f, unsigned int feature_dimension) 
+	Input(/*const*/ fctFEATURE& f, unsigned int feature_dimension) // Warning C4180: qualifier applied to function type has no meaning; ignored
 	  : xx(0),
 	    phi(f),
 	    phi_dim(feature_dimension),
@@ -259,7 +259,7 @@ namespace rl {
 	}
 
 	Output(PREVIOUS_LAYER& in,
-	       const MLP_TRANSFER& transfer) 
+	       /*const*/ MLP_TRANSFER& transfer) 
 	  : y(),input(in), f(transfer) {
 	  size = minParamRank() + nbParams();
 	}

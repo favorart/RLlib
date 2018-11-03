@@ -169,8 +169,9 @@ namespace rl {
                         const ACTION& a) {
                     try {
                         simulator.timeStep(a);
-                        auto next = simulator.sense();
-                        auto res = std::make_pair(next,policy(next));
+                        S next = simulator.sense();
+                        A a = policy(next);
+                        auto res = std::make_pair(next, a);
                         critic.learn(s,a,simulator.reward(),next,res.second);
                         return res;
                     }
@@ -223,7 +224,7 @@ namespace rl {
                         simulator.timeStep(policy(simulator.sense()));
                     } while(length != max_episode_duration);
                 }
-                catch(rl::exception::Terminal& e) {}
+                catch(rl::exception::Terminal&) {}
                 return length;
             }
 
@@ -258,7 +259,7 @@ namespace rl {
                             a = policy(s);
                         } while(length != max_episode_duration);
                     }
-                    catch(rl::exception::Terminal& e) { 
+                    catch(rl::exception::Terminal&) { 
                         *(out++) = make_terminal_transition(s,a,simulator.reward());
                     }
                     return length;
@@ -269,22 +270,22 @@ namespace rl {
          * @param max_episode_duration put a null number to run the episode without length limitation.
          * @return the actual episode length.
          */
-        template<typename SIMULATOR,typename POLICY,
-            typename CRITIC>
+        template<typename SIMULATOR,typename POLICY, typename CRITIC>
                 unsigned int learn(SIMULATOR& simulator,
                         const POLICY& policy,
                         CRITIC& critic,
                         unsigned int max_episode_duration) {
                     unsigned int length=0;
-                    auto s  = simulator.sense();
-                    auto sa = std::make_pair(s,policy(s));
+                    S s  = simulator.sense();
+                    A a = policy(s);
+                    auto sa = std::make_pair(s, a);
                     try {
                         do {
                             ++length;
                             sa = rl::episode::adaptation(simulator,policy,critic,sa.first,sa.second);
                         } while(length != max_episode_duration);
                     }
-                    catch(rl::exception::Terminal& e) {}
+                    catch(rl::exception::Terminal&) {}
                     return length;
                 }
 
