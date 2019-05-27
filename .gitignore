@@ -14,3 +14,8 @@ bin/.vs/*
 *.plt
 *.bin
 
+*.ppm
+*.html
+*.png
+*.user
+*.data
