@@ -58,15 +58,17 @@ int main(int argc, char* argv[]) {
     auto action_begin = rl::enumerator<A>(rl::problem::cliff_walking::Action::actionNorth);
     auto action_end   = action_begin + rl::problem::cliff_walking::actionSize;
 
-    auto      q = std::bind(q_parametrized,theta,_1,_2);
+    auto      q = std::bind(q_parametrized, theta, _1, _2);
     auto critic = rl::gsl::q_learning<S,A>(theta,
-            paramGAMMA,paramALPHA,
-            action_begin,action_end,
-            q_parametrized,
-            grad_q_parametrized);
+                    paramGAMMA,
+                    paramALPHA,
+                    action_begin,
+                    action_end,
+                    q_parametrized,
+                    grad_q_parametrized);
 
     gsl_vector_set_zero(theta);
-    make_experiment(critic,q, gen);
+    make_experiment(critic, q, gen);
     gsl_vector_free(theta);
     return 0;
 }

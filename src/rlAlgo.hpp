@@ -75,47 +75,48 @@ namespace rl {
     return m;
   }
 
-  template<typename ITERATOR,
-	   typename fctEVAL>
+  template <typename ITERATOR,
+	        typename fctEVAL>
   auto range(const fctEVAL& f,
-	   const ITERATOR& begin, 
-	   const ITERATOR& end)
-    -> std::pair<decltype(f(*begin)),
-		 decltype(f(*begin))>
-  { 
-    ITERATOR iter = begin;
-    auto min   = f(*iter);
-    auto max   = min;
-    for(++iter;iter!=end;++iter) {
-      auto  v = f(*iter);
-      if(v > max)
-	max = v;
-      else if(v < min)
-	min = v;
-    }
-    return {min,max};
+             const ITERATOR& begin,
+             const ITERATOR& end)
+      -> std::pair<decltype(f(*begin)), decltype(f(*begin))>
+  {
+      ITERATOR iter = begin;
+      auto min = f(*iter);
+      auto max = min;
+      for (++iter; iter != end; ++iter)
+      {
+          auto  v = f(*iter);
+          if (v > max)
+              max = v;
+          else if (v < min)
+              min = v;
+      }
+      return { min, max };
   }
 
-  template<typename ITERATOR,
-	   typename fctEVAL>
+  template <typename ITERATOR,
+	        typename fctEVAL>
   auto argmax(const fctEVAL& f,
-	      const ITERATOR& begin, 
-	      const ITERATOR& end)
-    -> std::pair<decltype(*begin),
-		 decltype(f(*begin))> 
-{ 
-    ITERATOR iter = begin;
-    auto arg_max = *iter;
-    auto max     = f(*iter);
-    for(++iter;iter!=end;++iter) {
-      auto a = *iter;
-      auto v = f(a);
-      if(v > max) {
-	max = v;
-	arg_max = a;
+              const ITERATOR& begin,
+              const ITERATOR& end)
+      -> std::pair<decltype(*begin), decltype(f(*begin))>
+  {
+      ITERATOR iter = begin;
+      auto arg_max = *iter;
+      auto max = f(*iter);
+      for (++iter; iter != end; ++iter)
+      {
+          auto a = *iter;
+          auto v = f(a);
+          if (v > max)
+          {
+              max = v;
+              arg_max = a;
+          }
       }
-    }
-    return {arg_max,max};
+      return { arg_max, max };
   }
 
   template<typename ITERATOR,

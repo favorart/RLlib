@@ -25,33 +25,29 @@
  */
 
 template<typename POLICY, typename RANDOM_GENERATOR>
-void test_iteration(const POLICY& policy, int step, RANDOM_GENERATOR& gen) {
-    Simulator       simulator(gen);
-    int             episode,length;
-    double          mean_length;
-    Transition      transition;
-
-    mean_length=0;
-    for(episode = 0; episode < NB_LENGTH_SAMPLES; ++episode) {
-
+void test_iteration(const POLICY& policy, int step, RANDOM_GENERATOR& gen)
+{
+    Simulator simulator(gen);
+    double mean_length = 0;
+    for (int episode = 0; episode < NB_LENGTH_SAMPLES; ++episode)
+    {
         // Let us generate an episode and get its length
         Simulator::phase_type start_phase;
         start_phase.random(gen);
         simulator.setPhase(start_phase);
-        length = rl::episode::run(simulator,policy,MAX_EPISODE_LENGTH);
+        int length = rl::episode::run(simulator, policy, MAX_EPISODE_LENGTH);
         // We display the length
         std::cout << "\rStep " << std::setw(4) << std::setfill('0') << step
-            << " : " << std::setfill('.') << std::setw(4) << episode+1 << " length = "
-            << std::setw(10) << std::setfill(' ') 
-            << length << std::flush;
+            << " : " << std::setfill('.') << std::setw(4) << episode + 1 
+            << " length = " << std::setw(10) << std::setfill(' ') << length 
+            << std::flush;
         // Mean update
         mean_length += length;
     }
-
     mean_length /= NB_LENGTH_SAMPLES;
-    std::cout << "\rStep " 
-        << std::setw(4) << std::setfill('0') << step
+    // display the mean length
+    std::cout << "\r Step " << std::setw(4) << std::setfill('0') << step
         << " : mean length = "
-        << std::setw(10) << std::setfill(' ') 
-        << .01*(int)(mean_length*100+.5) << std::endl;
+        << std::setw(10) << std::setfill(' ') << std::setprecision(2) << mean_length 
+        << std::endl;
 }

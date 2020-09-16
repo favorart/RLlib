@@ -54,7 +54,8 @@ void phi_direct(gsl_vector *phi, const S& s, const A& a) {
 }
 
 #define PHI_RBF_DIMENSION 30
-void phi_rbf(gsl_vector *phi, const S& s, const A& a) {
+void phi_rbf(gsl_vector *phi, const S& s, const A& a)
+{
   std::array<double,3> angle = { {-M_PI_4,0,M_PI_4} };
   std::array<double,3> speed = { {-1,0,1} };
 

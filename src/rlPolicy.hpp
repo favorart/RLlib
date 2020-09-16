@@ -81,7 +81,7 @@ namespace rl {
                             std::sample(action_begin, action_end, &selected_value, 1, gen);
                             return selected_value;
                         }
-                        return rl::argmax(std::bind(q_function,s,std::placeholders::_1),action_begin,action_end).first;
+                        return rl::argmax(std::bind(q_function, s, std::placeholders::_1), action_begin, action_end).first;
                     }; 
                 }
 
@@ -116,7 +116,7 @@ namespace rl {
                         const ACTION_ITERATOR& action_end,
                         RANDOM_GENERATOR& gen) {
                     return [&gen, q_function, &temperature, action_begin, action_end](const auto& s) {
-                        return rl::random::softmax(std::bind(q_function, s ,std::placeholders::_1),temperature,action_begin, action_end, gen);
+                        return rl::random::softmax(std::bind(q_function, s, std::placeholders::_1), temperature, action_begin, action_end, gen);
                     };
                 }    
     }

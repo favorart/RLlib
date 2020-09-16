@@ -68,7 +68,7 @@ std::string string_of_action(A a) {
         case rl::problem::cliff_walking::Action::actionSouth: res = "South"; break;
         case rl::problem::cliff_walking::Action::actionEast:  res = "East "; break;
         case rl::problem::cliff_walking::Action::actionWest:  res = "West "; break;
-        default:                                      res = "?????";
+        default:                                              res = "?????";
     }
     return res;
 }
@@ -110,12 +110,12 @@ Transition make_terminal_transition(S s, A a, Reward r) {
 // well.
 #define S_CARDINALITY         Cliff::size
 #define A_CARDINALITY         rl::problem::cliff_walking::actionSize
-#define TABULAR_Q_CARDINALITY S_CARDINALITY*A_CARDINALITY  // Array size for storing the Q[s,a].
-#define TABULAR_Q_RANK(s,a)   (static_cast<int>(a)*S_CARDINALITY+s)            // Index of the Q[s,a] value in the monodimentional array.
+#define TABULAR_Q_CARDINALITY S_CARDINALITY*A_CARDINALITY                  // Array size for storing the Q[s,a].
+#define TABULAR_Q_RANK(s,a)   (static_cast<int>(a)*S_CARDINALITY+s)        // Index of the Q[s,a] value in the monodimentional array.
 
 // This method simply retrives a q value from a gsl vector.
-double q_parametrized(const gsl_vector* theta,
-        S s, A a) { 
+double q_parametrized(const gsl_vector* theta, S s, A a)
+{ 
     return gsl_vector_get(theta,TABULAR_Q_RANK(s,a));
 }
 
@@ -124,20 +124,17 @@ double q_parametrized(const gsl_vector* theta,
 // some specific (s,a) value. With a tabular coding here, this
 // gradient is straightforward, since it is a (00..00100..00) vector
 // with a 1 at the (s,a) rank position.
-void grad_q_parametrized(const gsl_vector* theta,   
-        gsl_vector* grad_theta_sa,
-        S s, A a) {
+void grad_q_parametrized(const gsl_vector* theta,  gsl_vector* grad_theta_sa, S s, A a)
+{
     gsl_vector_set_basis(grad_theta_sa,TABULAR_Q_RANK(s,a));
+    // make basis vector by setting all the elements of the vector v to 0 except for the i-th element which is set to 1.
 }
-
 
 using namespace std::placeholders;
 
-
-
 // Let us start some experiment
-int main(int argc, char* argv[]) {
-
+int main(int argc, char* argv[])
+{
     std::random_device rd;
     std::mt19937 gen(rd());
 
@@ -147,7 +144,6 @@ int main(int argc, char* argv[]) {
     auto action_end   = action_begin + rl::problem::cliff_walking::actionSize;
     auto state_begin  = rl::enumerator<S>(Cliff::start);
     auto state_end    = state_begin + Cliff::size;
-
 
     // This is the dynamical system we want to control.
     Param      param;
@@ -172,7 +168,7 @@ int main(int argc, char* argv[]) {
     auto test_policy     = rl::policy::greedy(q,action_begin,action_end);
 
     // We intend to learn q on-line, by running episodes, and updating a
-    // critic fro the transition we get during the episodes. Let us use
+    // critic from the transition we get during the episodes. Let us use
     // some GSL-based critic for that purpose.
     auto critic = rl::gsl::sarsa<S,A>(theta,
             paramGAMMA,paramALPHA,
@@ -180,18 +176,13 @@ int main(int argc, char* argv[]) {
             grad_q_parametrized);
 
     // We have now all the elements to start experiments.
-
+    std::cout << "Learning " << std::endl << std::endl;
 
     // Let us run 10000 episodes with the agent that learns the Q-values.
-
-    std::cout << "Learning " << std::endl
-        << std::endl;
-
-    int episode;
-    for(episode = 0; episode < 10000; ++episode) {
+    for(int episode = 0; episode < 100/*10000*/; ++episode)
+    {
         simulator.restart();
-        auto actual_episode_length = rl::episode::learn(simulator,learning_policy,critic,
-                0);
+        auto actual_episode_length = rl::episode::learn(simulator,learning_policy,critic,0);
         if(episode % 200 == 0)
             std::cout << "episode " << std::setw(5) << episode+1 
                 << " : length = " << std::setw(5) << actual_episode_length << std::endl;
@@ -204,34 +195,36 @@ int main(int argc, char* argv[]) {
         << std::endl
         << theta << std::endl
         << std::endl;
-
-
-    // Let us define v as v(s) = max_a q(s_a) with a labda function.
-    auto v = [&action_begin,&action_end,&q](S s) -> double {return rl::max(std::bind(q,s,_1),
-            action_begin,
-            action_end);};
+    
+    // Let us define v as v(s) = max_a q(s_a) with a lambda function.
+    auto v = [&action_begin, &action_end, &q](S s) -> double {
+        return rl::max(std::bind(q, s, _1), action_begin, action_end);
+    };
     // We can draw the Value function a image file.
-    auto v_range = rl::range(v,state_begin,state_end); 
+    auto v_range = rl::range(v, state_begin, state_end);
     std::cout << std::endl
         << " V in [" << v_range.first << ',' << v_range.second << "]." << std::endl
         << std::endl;
-    Cliff::draw("V-overview",0,v,v_range.first,v_range.second);
+
+    Cliff::draw("V-overview", 0, v, v_range.first, v_range.second);
+
     std::cout << "Image file \"V-overview-000000.ppm\" generated." << std::endl
         << std::endl;
 
     // Let us be greedy on the policy we have found, using the greedy
     // agent to run an episode.
     simulator.restart();
-    unsigned int nb_steps = rl::episode::run(simulator,test_policy,0);
+    unsigned int nb_steps = rl::episode::run(simulator,test_policy, 100000/*0*/);
     std::cout << "Best policy episode ended after " << nb_steps << " steps." << std::endl;
 
     // We can also gather the transitions from an episode into a collection.
     std::vector<Transition> transition_set;
     simulator.restart();
-    nb_steps = rl::episode::run(simulator,test_policy,
-            std::back_inserter(transition_set),
-            make_transition,make_terminal_transition,
-            0);
+    nb_steps = rl::episode::run(simulator, test_policy,
+                                std::back_inserter(transition_set),
+                                make_transition,
+                                make_terminal_transition,
+                                100000/*0*//*max=2**32*/);
     std::cout << std::endl
         << "Collected transitions :" << std::endl
         << "---------------------" << std::endl
@@ -239,7 +232,6 @@ int main(int argc, char* argv[]) {
         << std::endl;
     for(auto& t : transition_set)
         std::cout << t << std::endl;
-
 
     gsl_vector_free(theta);
     return 0;

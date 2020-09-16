@@ -25,49 +25,56 @@
  */
 
 
-template<typename CRITIC, typename fctQ, typename ACTION_ITERATOR, typename RANDOM_GENERATOR>
-void make_experiment(CRITIC& critic, const fctQ& q,
-        const ACTION_ITERATOR& a_begin,
-        const ACTION_ITERATOR& a_end,
-        RANDOM_GENERATOR& gen) {
-    int               episode,step;
-    std::ofstream     ofile;
-    std::ifstream     ifile;
+template <
+    typename CRITIC, 
+    typename fctQ, 
+    typename ACTION_ITERATOR, 
+    typename RANDOM_GENERATOR
+>
+void make_experiment(CRITIC& critic, 
+                     const fctQ& q,
+                     const ACTION_ITERATOR& a_begin,
+                     const ACTION_ITERATOR& a_end,
+                     RANDOM_GENERATOR& gen)
+{
+    Simulator  simulator(gen);
+    auto       explore_agent = rl::policy::random(a_begin, a_end, gen);
+    auto       greedy_agent = rl::policy::greedy(q, a_begin, a_end);
 
-    Simulator         simulator(gen);
-    CRITIC            critic_loaded = critic;
-
-    auto              explore_agent = rl::policy::random(a_begin,a_end, gen);
-    auto              greedy_agent  = rl::policy::greedy(q,a_begin,a_end);
-
-    try {
-        step = 0;
-
-        for(episode = 0; episode < NB_OF_EPISODES; ++episode) {
-            simulator.setPhase(Simulator::phase_type()); 
-            rl::episode::learn(simulator,explore_agent,critic,MAX_EPISODE_LENGTH);
-            if((episode % TEST_PERIOD)==0) {
+    try
+    {
+        int step = 0;
+        for (int episode = 0; episode < NB_OF_EPISODES; ++episode)
+        {
+            Simulator::phase_type s;
+            simulator.setPhase(s);
+            rl::episode::learn(simulator, explore_agent, critic, MAX_EPISODE_LENGTH);
+            if ((episode % TEST_PERIOD) == 0)
+            {
                 ++step;
-                test_iteration(greedy_agent,step, gen);
+                test_iteration(greedy_agent, step, gen);
             }
         }
 
         // Now, we can save the ktdq object.
         std::cout << "Writing ktdq.data" << std::endl;
-        ofile.open("ktdq.data");
-        if(!ofile)
+        std::ofstream ofile("ktdq.data");
+        if (!ofile)
             std::cerr << "cannot open file for writing" << std::endl;
-        else {
+        else
+        {
             ofile << critic;
             ofile.close();
         }
 
         // You can load back with >>
+        CRITIC critic_loaded = critic;
         std::cout << "Reading ktdq.data" << std::endl;
-        ifile.open("ktdq.data");
-        if(!ifile)
+        std::ifstream ifile("ktdq.data");
+        if (!ifile)
             std::cerr << "cannot open file for reading" << std::endl;
-        else {
+        else
+        {
             ifile >> critic_loaded;
             ifile.close();
         }
@@ -76,9 +83,10 @@ void make_experiment(CRITIC& critic, const fctQ& q,
         // of the critic modifies q, and thus the greedy agent.
 
         // let us try this loaded ktdq
-        test_iteration(greedy_agent,step, gen);           
+        test_iteration(greedy_agent, step, gen);
     }
-    catch(rl::exception::Any& e) {
+    catch (rl::exception::Any& e)
+    {
         std::cerr << "Exception caught : " << e.what() << std::endl;
     }
 }

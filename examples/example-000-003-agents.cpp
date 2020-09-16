@@ -186,11 +186,9 @@ int main(int argc, char* argv[]) {
     auto random_policy         = rl::policy::random(a_begin,a_end,gen);
     auto greedy_policy         = rl::policy::greedy(q,a_begin,a_end);
     double epsilon = .75; 
-    auto epsilon_greedy_policy = rl::policy::epsilon_greedy(q,epsilon,
-            a_begin,a_end, gen);
+    auto epsilon_greedy_policy = rl::policy::epsilon_greedy(q, epsilon, a_begin, a_end, gen);
     double temperature = 0;
-    auto softmax_policy        = rl::policy::softmax(q,temperature,
-            a_begin,a_end, gen);
+    auto softmax_policy        = rl::policy::softmax(q, temperature, a_begin, a_end, gen);
 
     try {
         // Let us initialize the values with a bi-modal distribution...

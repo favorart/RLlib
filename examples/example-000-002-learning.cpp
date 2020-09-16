@@ -43,47 +43,42 @@
 // the value reaches 1... that is also the terminal state.
 class Simulator {
 public:
-  typedef double                    phase_type;       
-  typedef phase_type                observation_type; 
-  typedef enum Action {actionLower,
-		       actionNone,
-		       actionRaise} action_type; 
-  typedef double                    reward_type;  
+  typedef double phase_type;       
+  typedef phase_type observation_type; 
+  typedef enum Action {actionLower, actionNone, actionRaise} action_type; 
+  typedef double reward_type;  
   
 private:
   phase_type x;
   reward_type r;
 
 public:
-
-  class SomethingWrong :  public rl::exception::Any {
+  class SomethingWrong : public rl::exception::Any {
   public: 
     SomethingWrong(std::string comment) 
-      : rl::exception::Any(std::string("Something went wrong : ")
-			   + comment) {} 
+      : rl::exception::Any(std::string("Something went wrong : ") + comment)
+    {} 
   };
 
-  Simulator(void)
-    : x(.5), r(0) {}
-  ~Simulator(void) {}
+  Simulator() : x(.5), r(0) {}
+  ~Simulator() {}
 
   void setPhase(const phase_type &s)         {x = s;}
-  const observation_type& sense(void) const  {return x;}
-  reward_type reward(void) const             {return r;}
+  const observation_type& sense() const  {return x;}
+  reward_type reward() const             {return r;}
   
-  void timeStep (const action_type &a) {
-    double dx;
-
+  void timeStep (const action_type &a)
+  {
+    //double dx; // ???
     switch(a) {
     case actionLower: x-=.05; break;
     case actionNone:          break;
     case actionRaise: x+=.05; break;
     default:
       throw SomethingWrong("Simulator::timeStep : Bad action.");
-    }
-    
+    }    
     r = 0;
-    x += dx;
+    //x += dx;
     if(x<0)
       x = 0;
     else if(x>=1) {
@@ -107,8 +102,8 @@ typedef Simulator::reward_type      Reward;
 // pair by a vector. Let us implement a Gaussian radial basis functions.
 
 // The feature phi(s,a) is a vector handled by a gsl_vector.
-
-void phi(gsl_vector *phi, const S& s, const A& a) {
+void phi(gsl_vector *phi, const S& s, const A& a)
+{
   int offset;
   double dist;
 
@@ -132,9 +127,8 @@ void phi(gsl_vector *phi, const S& s, const A& a) {
 // Some other algorithms use parametrized functions, to approximate
 // Q-values for example. This is what a regression is. Let us define a
 // very simple linear represention for the Q values.
-
-Reward q_parametrized(const gsl_vector* theta,
-		      S s, A act) { 
+Reward q_parametrized(const gsl_vector* theta, S s, A act)
+{ 
     double a,b;
     int offset;
 

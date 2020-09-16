@@ -96,14 +96,12 @@ int main(int argc, char* argv[]) {
     auto q_parametrized = [tmp](const gsl_vector* th,S s, A a) -> Reward {double res;
         phi_rbf(tmp,s,a);           // phi_sa = phi(s,a)
         gsl_blas_ddot(th,tmp,&res); // res    = th^T  . phi_sa
-        return res;};
-
+        return res;
+    };
     auto q = std::bind(q_parametrized,theta,_1,_2);
-
 
     rl::enumerator<A> a_begin(rl::problem::inverted_pendulum::Action::actionNone);
     rl::enumerator<A> a_end = a_begin+3;
-
 
     auto critic = rl::gsl::ktd_q<S,A>(theta,
             q_parametrized,

@@ -54,23 +54,20 @@
 
 class Bonobo {
     private:
-
         // Here is our internal cuisine.
         std::string word;
         double r;
 
     public:
-
         // This is for debugging
         bool verbose;
 
         // The following methods are also required by the rl::concept::Simulator.
-        Bonobo(void) 
-            : word("BONBON"), r(0), verbose(false)   {}
-        ~Bonobo (void)                             {}
-        void setPhase(const std::string &s)        {word = s;}
-        const std::string& sense(void) const       {return word;}
-        double reward(void) const                  {return r;}
+        Bonobo() : word("BONBON"), r(0), verbose(false) {}
+        ~Bonobo ()                                      {}
+        void setPhase(const std::string &s)             {word = s;}
+        const std::string& sense() const                {return word;}
+        double reward() const                           {return r;}
 
         // Let us define an exception if bad letters are provided.
         class BadLetter : public rl::exception::Any {
@@ -79,9 +76,9 @@ class Bonobo {
                     : rl::exception::Any(std::string("Bad letter '")
                             + std::string(1,letter)
                             + std::string("' received : ")
-                            + comment) {} 
+                            + comment)
+                {} 
         };
-
 
         // This is where things happen. Usually, this method is the most
         // difficult thing to write when using the library, since it

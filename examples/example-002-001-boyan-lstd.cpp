@@ -94,10 +94,11 @@ int main(int argc, char* argv[]) {
 									phi(tmp,s);                 // phi_s = phi(s)
 									gsl_blas_ddot(th,tmp,&res); // res   = th^T  . phi_s
 									return res;};
-  auto grad_v_parametrized = [&phi,tmp](const gsl_vector* th,   
-					gsl_vector* grad_th_s,
-					S s) -> void {phi(tmp,s);                         // phi_s    = phi(s)
-						      gsl_vector_memcpy(grad_th_s,tmp);}; // grad_th_s = phi_s
+  auto grad_v_parametrized = [&phi,tmp](const gsl_vector* th, gsl_vector* grad_th_s, S s) -> void 
+  {
+      phi(tmp,s);                         // phi_s    = phi(s)
+      gsl_vector_memcpy(grad_th_s,tmp);   // grad_th_s = phi_s
+  };
 
   std::chrono::steady_clock::time_point begin;
   std::chrono::steady_clock::time_point end;

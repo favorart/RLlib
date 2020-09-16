@@ -15,8 +15,8 @@
 
 
 // The problem on which to train a controller
-using Cliff     = rl::problem::cliff_walking::Cliff<20,6>;
-using Param     = rl::problem::cliff_walking::Param;
+using Cliff     = rl::problem::cliff_walking::Cliff<20/*length*/,6/*width*/>;
+using Param     = rl::problem::cliff_walking::Param/*rewards=defualt*/;
 using Simulator = rl::problem::cliff_walking::Simulator<Cliff,Param>;
 
 using S = Simulator::observation_type;
@@ -24,12 +24,11 @@ using A = Simulator::action_type;
 
 // The controller architecture
 using Architecture = rl::gsl::ActorCritic::Architecture::Tabular<S, A, std::mt19937>;
-
 // The algorithm to train the controller
 using Learner      = rl::gsl::ActorCritic::Learner::EligibilityTraces<Architecture>;
 
-int main(int argc, char* argv[]) {
-
+int main(int argc, char* argv[])
+{
     std::random_device rd;
     std::mt19937 gen(rd());
 
@@ -40,45 +39,44 @@ int main(int argc, char* argv[]) {
     // 2) Instantiate the ActorCritic
     auto action_begin = rl::enumerator<A>(rl::problem::cliff_walking::Action::actionNorth);
     auto action_end = action_begin + rl::problem::cliff_walking::actionSize;
+
     unsigned int nb_features = Cliff::size;
     Architecture archi(nb_features,
-            [](const S& s) { return s;},
-            action_begin, action_end, gen);
+                       [](const S &s) { return s; },
+                       action_begin, action_end, gen);
 
     // 3) Instantiate the learner
     Learner learner(archi, paramGAMMA, paramALPHA_V, paramALPHA_P, paramLAMBDA_V, paramLAMBDA_P);
 
     // 4) run NB_EPISODES episodes
-    unsigned int episode;
-    unsigned int step;
-    A action;
-    S state, next;
-    double rew;
-
     std::cout << "Learning " << std::endl;
-    for(episode = 0 ;episode < NB_EPISODES; ++episode) {
+    for (unsigned episode = 0; episode < NB_EPISODES; ++episode)
+    {
         simulator.restart();
         learner.restart();
-        step = 0;
+        unsigned step = 0;
         std::cout << '\r' << "Episode " << episode << std::flush;
 
-        state = simulator.sense();
+        S state = simulator.sense();
 
-        while(true) {
-            action = archi.sample_action(state);
-            try {
+        while (true)
+        {
+            A action = archi.sample_action(state);
+            try
+            {
                 // The following may raise a Terminal state exception
                 simulator.timeStep(action);
 
-                rew = simulator.reward();
-                next = simulator.sense();
+                double reward = simulator.reward();
+                S next = simulator.sense();
 
-                learner.learn(state, action, rew, next);
+                learner.learn(state, action, reward, next);
 
                 state = next;
                 ++step;
             }
-            catch(rl::exception::Terminal&) { 
+            catch (rl::exception::Terminal&)
+            {
                 learner.learn(state, action, simulator.reward());
                 break;
             }
@@ -88,35 +86,39 @@ int main(int argc, char* argv[]) {
 
     std::cout << "Testing the learned policy" << std::endl;
     // After this training phase, we test the policy
-    unsigned int nb_test_episodes = 1000;
-    double cum_length = 0.0;
-    for(unsigned int i = 0 ; i < nb_test_episodes; ++i) {
+    unsigned nb_test_episodes = 1000;
+    double cum_length = 0.;
+    for (unsigned i = 0; i < nb_test_episodes; ++i)
+    {
         simulator.restart();
-        step = 0;
-        state = simulator.sense();
-        while(true) {
-            action = archi.sample_action(state);
-            try {
+        unsigned step = 0;
+        S state = simulator.sense();
+        while (true)
+        {
+            A action = archi.sample_action(state);
+            try
+            {
                 // The following may raise a Terminal state exception
                 simulator.timeStep(action);
                 state = simulator.sense();
                 ++step;
             }
-            catch(rl::exception::Terminal&) { 
+            catch (rl::exception::Terminal&)
+            {
                 break;
             }
         }
         cum_length += step;
     }
-    std::cout << "The mean length of "<< nb_test_episodes
-        <<" testing episodes is " << cum_length / double(nb_test_episodes) << std::endl;
+    std::cout << "The mean length of " << nb_test_episodes
+        << " testing episodes is " << cum_length / double(nb_test_episodes) << std::endl;
 
     // And let us display the action probabilities for the first state :
     std::cout << "The probabilities of the actions of the learned controller, in the start state are :" << std::endl;
     auto proba = archi.get_action_probabilities(0);
-    std::cout << "P(North/s=start) = " << proba[rl::problem::cliff_walking::Action::actionNorth] << std::endl;
-    std::cout << "P(East/s=start) = " << proba[rl::problem::cliff_walking::Action::actionEast] << std::endl;
-    std::cout << "P(South/s=start) = " << proba[rl::problem::cliff_walking::Action::actionSouth] << std::endl;
-    std::cout << "P(West/s=start) = " << proba[rl::problem::cliff_walking::Action::actionWest] << std::endl;
-
+    std::cout << "P(North/s=start) = " << proba[rl::problem::cliff_walking::Action::actionNorth]  << std::endl;
+    std::cout << "P(East /s=start) = " << proba[rl::problem::cliff_walking::Action::actionEast]   << std::endl;
+    std::cout << "P(South/s=start) = " << proba[rl::problem::cliff_walking::Action::actionSouth]  << std::endl;
+    std::cout << "P(West /s=start) = " << proba[rl::problem::cliff_walking::Action::actionWest]   << std::endl;
+    return 0;
 }

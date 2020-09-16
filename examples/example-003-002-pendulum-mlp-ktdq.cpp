@@ -85,47 +85,45 @@ using Simulator = rl::problem::inverted_pendulum::Simulator<ipParams, std::mt199
 #include "example-defs-test-iteration.hpp"
 #include "example-defs-ktdq-experiments.hpp"
 
-int main(int argc, char* argv[]) {
-
+int main(int argc, char* argv[])
+{
     std::random_device rd;
     std::mt19937 gen(rd());
 
-  // Let us setup the Q-function approximator as a perceptron.
-  
-  auto sigmoid        = std::bind(rl::transfer::tanh,_1,paramSIGMOID_COEF);
-  auto input_layer    = rl::gsl::mlp::input<S,A>(phi_direct,     PHI_DIRECT_DIMENSION);
-  auto hidden_layer_1 = rl::gsl::mlp::hidden    (input_layer,    5, sigmoid );
-  auto hidden_layer_2 = rl::gsl::mlp::hidden    (hidden_layer_1, 3, sigmoid );
-  auto q_parametrized = rl::gsl::mlp::output    (hidden_layer_2, rl::transfer::identity);
+    // Let us setup the Q-function approximator as a perceptron
+    auto sigmoid        = std::bind(rl::transfer::tanh, _1, paramSIGMOID_COEF);
+    auto input_layer    = rl::gsl::mlp::input<S, A>(phi_direct, PHI_DIRECT_DIMENSION);
+    auto hidden_layer_1 = rl::gsl::mlp::hidden(input_layer, 5, sigmoid);
+    auto hidden_layer_2 = rl::gsl::mlp::hidden(hidden_layer_1, 3, sigmoid);
+    auto q_parametrized = rl::gsl::mlp::output(hidden_layer_2, rl::transfer::identity);
 
-  gsl_vector* theta = gsl_vector_alloc(q_parametrized.size);
-  gsl_vector_set_zero(theta);
+    gsl_vector* theta = gsl_vector_alloc(q_parametrized.size);
+    gsl_vector_set_zero(theta);
 
-  // Let us display the structure of our MLP...
-  std::cout << std::endl;
-  q_parametrized.displayParameters(std::cout);
-  std::cout << std::endl;
+    // Let us display the structure of our MLP...
+    std::cout << std::endl;
+    q_parametrized.displayParameters(std::cout);
+    std::cout << std::endl;
 
-  auto q = std::bind(q_parametrized,theta,_1,_2);
+    auto q = std::bind(q_parametrized, theta, _1, _2);
 
-  rl::enumerator<A> a_begin(rl::problem::inverted_pendulum::Action::actionNone);
-  rl::enumerator<A> a_end = a_begin+ rl::problem::inverted_pendulum::actionSize;
+    rl::enumerator<A> a_begin(rl::problem::inverted_pendulum::Action::actionNone);
+    rl::enumerator<A> a_end = a_begin + rl::problem::inverted_pendulum::actionSize;
 
-  auto critic = rl::gsl::ktd_q<S,A>(theta,
-				    q_parametrized,
-				    a_begin,a_end,
-				    paramGAMMA,
-				    paramETA_NOISE, 
-				    paramOBSERVATION_NOISE, 
-				    paramPRIOR_VAR,    
-				    paramRANDOM_AMPLITUDE,    
-				    paramUT_ALPHA,         
-				    paramUT_BETA,                
-				    paramUT_KAPPA,                
-				    paramUSE_LINEAR_EVALUATION,
-                    gen);
+    auto critic = rl::gsl::ktd_q<S, A>(theta,
+                                       q_parametrized,
+                                       a_begin, a_end,
+                                       paramGAMMA,
+                                       paramETA_NOISE,
+                                       paramOBSERVATION_NOISE,
+                                       paramPRIOR_VAR,
+                                       paramRANDOM_AMPLITUDE,
+                                       paramUT_ALPHA,
+                                       paramUT_BETA,
+                                       paramUT_KAPPA,
+                                       paramUSE_LINEAR_EVALUATION,
+                                       gen);
 
-  make_experiment(critic,q,a_begin,a_end,gen);
-
-  return 0;
+    make_experiment(critic, q, a_begin, a_end, gen);
+    return 0;
 }

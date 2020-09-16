@@ -101,13 +101,10 @@ int main(int argc, char* argv[]) {
             << "  " << argv[0] << " test <position> <speed>" << std::endl;
         return 0;
     }
-
-
+    
     arg = argv[1];
-
     if(arg == "learnandmovie")
         movie_mode=true;
-
     if(arg == "learn" || arg == "learnandmovie") {
         learn_mode = true;
         if(argc == 3)
@@ -143,7 +140,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-
     if(learn_mode)
         train(nb_episodes,movie_mode, gen);
     else
@@ -160,19 +156,18 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
     Simulator      simulator;
     RBFFeature     phi;
 
-    gsl_vector* theta = gsl_vector_alloc(PHI_RBF_DIMENSION);
+    gsl_vector *theta = gsl_vector_alloc(PHI_RBF_DIMENSION);
     gsl_vector_set_zero(theta);
-    gsl_vector* tmp = gsl_vector_alloc(PHI_RBF_DIMENSION);
+    gsl_vector *tmp = gsl_vector_alloc(PHI_RBF_DIMENSION);
     gsl_vector_set_zero(tmp);
 
-    auto q_parametrized = [tmp,&phi](const gsl_vector* th,S s, A a) -> Reward {
+    auto q_parametrized = [&tmp, &phi](const gsl_vector *th, S s, A a) -> Reward {
         double res;
-        phi(tmp,s,a);           // phi_sa = phi(s,a)
-        gsl_blas_ddot(th,tmp,&res); // res    = th^T  . phi_sa
-        return res;};
-
-    auto q = std::bind(q_parametrized,theta,_1,_2);
-
+        phi(tmp, s, a);           // phi_sa = phi(s,a)
+        gsl_blas_ddot(th, tmp, &res); // res    = th^T  . phi_sa
+        return res;
+    };
+    auto q = std::bind(q_parametrized, theta, _1, _2);
 
     // std::array<A, rl::problem::mountain_car::actionSize> actions = {rl::problem::mountain_car::Action::actionBackward, rl::problem::mountain_car::Action::actionNone, rl::problem::mountain_car::Action::actionForward};
     // auto a_begin = actions.begin();
@@ -182,8 +177,8 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
     rl::enumerator<A> a_end = a_begin+rl::problem::mountain_car::actionSize;
 
     double     epsilon = paramEPSILON;
-    auto explore_agent = rl::policy::epsilon_greedy(q,epsilon,a_begin,a_end, gen);
-    auto greedy_agent  = rl::policy::greedy(q,a_begin,a_end);
+    auto explore_agent = rl::policy::epsilon_greedy(q, epsilon, a_begin, a_end, gen);
+    auto greedy_agent  = rl::policy::greedy(q, a_begin, a_end);
 
     auto critic = rl::gsl::ktd_sarsa<S,A>(theta,
             q_parametrized,
@@ -199,21 +194,25 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
             gen);
 
     try {
-
         step = 0;
-        for(episode = 0; episode < nb_episodes; ++episode) {
-
-            std::cout << "Running episode " << episode+1 << "/" << nb_episodes << "." << std::endl;
-            simulator.setPhase(Simulator::phase_type::random(gen)); 
-            episode_length = rl::episode::learn(simulator,explore_agent,critic,MAX_EPISODE_LENGTH_LEARN);
+        for (episode = 0; episode < nb_episodes; ++episode)
+        {
+            std::cout << "Running episode " << episode + 1 << "/" << nb_episodes << "." << std::endl;
+            simulator.setPhase(Simulator::phase_type::random(gen));
+            episode_length = rl::episode::learn(simulator, explore_agent, critic, MAX_EPISODE_LENGTH_LEARN);
             std::cout << "... length is " << episode_length << "." << std::endl;
 
             ++step;
 
-            if(make_movie)
-                Gnuplot::drawQ("KTD Sarsa + RBF",
-                        "ktd",step,
-                        critic,greedy_agent);
+            if (make_movie)
+            {
+#ifdef WIN32
+#define OUTPUT_DIR "plots\\"
+#else
+#define OUTPUT_DIR ""
+#endif
+                Gnuplot::drawQ("KTD Sarsa + RBF", OUTPUT_DIR "ktd", step, critic, greedy_agent);
+            }
         }
 
         // Let us save the results.
@@ -225,33 +224,41 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
             file.close();
         }
 
-        if(make_movie) {
+        if (make_movie)
+        {
+            auto exec_cmd = [](const std::string& cmd) {
+                std::cout << "Executing : " << cmd << std::endl;
+                system(cmd.c_str());
+            };
+
+#ifdef WIN32
+
+#define GNUPLOT_PATH "\"C:\\Program Files (x86)\\gnuplot\\bin\\gnuplot.exe\""
+#define FFMPEG_PATH  "\"C:\\Program Files\\Webots\\msys64\\mingw64\\bin\\ffmpeg.exe\""
+#define CONVIMG_PATH "\"C:\\MinGW\\imgmag\\convert.exe\""
+#define AVI_NAME     "\"rllib1.avi\""
 
             std::string command;
-
-            command = "find . -name \"ktd-*.plt\" -exec gnuplot \\{} \\;";
-            std::cout << "Executing : " << command << std::endl;
-            system(command.c_str());
-
-            command = "find . -name \"ktd-*.png\" -exec convert \\{} -quality 100 \\{}.jpg \\;";
-            std::cout << "Executing : " << command << std::endl;
-            system(command.c_str());
-
-            command = "ffmpeg -i ktd-%06d.png.jpg -b 1M rllib.avi";
-            std::cout << "Executing : " << command << std::endl;
-            system(command.c_str());
-
-            command = "find . -name \"ktd-*.plt\" -exec rm \\{} \\;";
-            std::cout << "Executing : " << command << std::endl;
-            system(command.c_str());
-
-            command = "find . -name \"ktd-*.png\" -exec rm \\{} \\;";
-            std::cout << "Executing : " << command << std::endl;
-            system(command.c_str());
-
-            command = "find . -name \"ktd-*.png.jpg\" -exec rm \\{} \\;";
-            std::cout << "Executing : " << command << std::endl;
-            system(command.c_str());
+            command = ("for %a in (\"" OUTPUT_DIR "ktd-*.plot\") do " GNUPLOT_PATH " %a");
+            exec_cmd(command);
+            command = ("for %a in (\"" OUTPUT_DIR "ktd-*.png\") do " CONVIMG_PATH " %a -quality 100 %a.jpg");
+            exec_cmd(command);
+            command = (FFMPEG_PATH " -i \"" OUTPUT_DIR "ktd-%06d.png.jpg\" -b 1M " AVI_NAME);
+            exec_cmd(command);
+            command = ("for %a in (\"" OUTPUT_DIR "ktd-*.plot\") do del %a");
+            exec_cmd(command);
+            command = ("for %a in (\"" OUTPUT_DIR "ktd-*.png\") do del %a");
+            exec_cmd(command);
+            command = ("for %a in (\"" OUTPUT_DIR "ktd-*.png.jpg\") do del %a");
+            exec_cmd(command);
+#else
+            exec_cmd("find . -name \"ktd-*.plt\" -exec gnuplot \\{} \\;");
+            exec_cmd("find . -name \"ktd-*.png\" -exec convert \\{} -quality 100 \\{}.jpg \\;)";
+            exec_cmd("ffmpeg -i ktd-%06d.png.jpg -b 1M rllib.avi");
+            exec_cmd("find . -name \"ktd-*.plt\" -exec rm \\{} \\;");
+            exec_cmd("find . -name \"ktd-*.png\" -exec rm \\{} \\;");
+            exec_cmd("find . -name \"ktd-*.png.jpg\" -exec rm \\{} \\;");
+#endif
         }
     }
     catch(rl::exception::Any& e) {
@@ -260,31 +267,28 @@ void train(int nb_episodes, bool make_movie, RANDOM_GENERATOR& gen) {
 }
 
 template<typename RANDOM_GENERATOR>
-void test(const Simulator::phase_type& start, RANDOM_GENERATOR& gen) {
-    //int            episode, step, episode_length;
-    std::string    command;
-    std::ifstream  file;
-
-    Simulator      simulator;
-    RBFFeature     phi;
+void test(const Simulator::phase_type& start, RANDOM_GENERATOR& gen)
+{
+    RBFFeature phi;
 
     gsl_vector* theta = gsl_vector_alloc(PHI_RBF_DIMENSION);
     gsl_vector_set_zero(theta);
     gsl_vector* tmp = gsl_vector_alloc(PHI_RBF_DIMENSION);
     gsl_vector_set_zero(tmp);
 
-    auto q_parametrized = [tmp,&phi](const gsl_vector* th,S s, A a) -> Reward {double res;
-        phi(tmp,s,a);           // phi_sa = phi(s,a)
-        gsl_blas_ddot(th,tmp,&res); // res    = th^T  . phi_sa
-        return res;};
-
-    auto q = std::bind(q_parametrized,theta,_1,_2);
+    auto q_parametrized = [&tmp, &phi](const gsl_vector *th, S s, A a) -> Reward {
+        double res;
+        phi(tmp, s, a);               // phi_sa = phi(s,a)
+        gsl_blas_ddot(th, tmp, &res); // res    = th^T * phi_sa     // compute  scalar product x^Ty for vectors x and y, return in res
+        return res;
+    };
+    auto q = std::bind(q_parametrized, theta, _1, _2);
 
 
     rl::enumerator<A> a_begin(rl::problem::mountain_car::Action::actionNone); // This MUST be the lowest value of the enum type of actions and action enum values are consecutive for mountain_car
-    rl::enumerator<A> a_end = a_begin+rl::problem::mountain_car::actionSize;
+    rl::enumerator<A> a_end = a_begin + rl::problem::mountain_car::actionSize;
 
-    auto greedy_agent  = rl::policy::greedy(q,a_begin,a_end);
+    auto greedy_agent = rl::policy::greedy(q, a_begin, a_end);
 
     auto critic = rl::gsl::ktd_sarsa<S,A>(theta,
             q_parametrized,
@@ -298,8 +302,9 @@ void test(const Simulator::phase_type& start, RANDOM_GENERATOR& gen) {
             paramUT_KAPPA,                
             paramUSE_LINEAR_EVALUATION, gen);
 
-    try {
-
+    try
+    {
+        std::ifstream file;
         file.open(KTDSARSA_FILENAME);
         if(!file) {
             std::cerr << "Cannot open \"" << KTDSARSA_FILENAME << "\"." << std::endl;
@@ -309,6 +314,7 @@ void test(const Simulator::phase_type& start, RANDOM_GENERATOR& gen) {
         // Let us load some critic ...
         file >> critic;
 
+        Simulator simulator;
         // ... and run an episode.
         simulator.setPhase(start); 
         Gnuplot::drawEpisode("Mountain car run",

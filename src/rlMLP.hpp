@@ -36,54 +36,53 @@
 #include <functional>
 
 namespace rl {
-  namespace transfer {
-    inline double identity(double weighted_sum) {return weighted_sum;}
+namespace transfer {
+inline double identity(double weighted_sum)
+{
+    return weighted_sum;
+}
 
-    /**
-     * @short This acts as a sigmoid, since it is y=ax kept in [-1,1]
-     */
-    inline double saturation(double weighted_sum,
-			     double a) {
-      double res = weighted_sum*a;
-      if(res > 1)
-	return 1;
-      if(res < -1)
-	return -1;
-      return weighted_sum;
-    } 
-      
-    /**
-     * @short This is tanh(ax) saturation.
-     */
-    /**
-     * @short This acts as a sigmoid, since it is y=ax kept in [-1,1]
-     */
-    inline double tanh(double weighted_sum,
-		       double a) {
-      return ::tanh(weighted_sum*a);
-    } 
-  }
+/**
+ * @short This acts as a sigmoid, since it is y=ax kept in [-1,1]
+ */
+inline double saturation(double weighted_sum, double a)
+{
+    double res = weighted_sum * a;
+    if (res > 1.)
+        return 1.;
+    if (res < -1.)
+        return -1.;
+    return weighted_sum;
+}
+  
+/**
+ * @short This is tanh(ax) saturation.
+ */
+/**
+ * @short This acts as a sigmoid, since it is y=ax kept in [-1,1]
+ */
+inline double tanh(double weighted_sum, double a)
+{
+  return ::tanh(weighted_sum*a);
+} 
+}
 
-  namespace gsl {
-    namespace mlp {
-
-      
-
-      /**
-       * @short This defines the input layer of the neural network.
-       */
-      template<typename STATE,
-	       typename ACTION,
-	       typename fctFEATURE> 
-      class Input {
-      private:
-
+namespace gsl {
+namespace mlp {
+/**
+ * @short This defines the input layer of the neural network.
+ */
+template<
+     typename STATE,
+     typename ACTION,
+     typename fctFEATURE> 
+class Input
+{
 	gsl_vector* xx;
 	std::function<void (gsl_vector*,const STATE&, const ACTION&)> phi;
 	unsigned int phi_dim;
 	
-      public:
-	
+public:
 	typedef STATE  state_type;
 	typedef ACTION action_type;
 	
@@ -91,30 +90,34 @@ namespace rl {
 	unsigned int minParamRank(void) const {return 0;}
 	unsigned int nbParams(void)     const {return 0;}
 	unsigned int layerSize(void)    const {return phi_dim;}
-	
 	unsigned int size;
 
-	void displayParameters(std::ostream& os) const {
+	void displayParameters(std::ostream& os) const
+    {
 	  os << "Input  #" << std::setw(3) << rank()
 	     << " :        no weight"
 	     << " : size = " << std::setw(4) << layerSize() << std::endl;
 	}
 
-	Input(/*const*/ fctFEATURE& f, unsigned int feature_dimension) // Warning C4180: qualifier applied to function type has no meaning; ignored
+	Input(const fctFEATURE& f, unsigned feature_dimension) // Warning C4180: qualifier applied to function type has no meaning; ignored
 	  : xx(0),
 	    phi(f),
 	    phi_dim(feature_dimension),
-	    size(0) {
+	    size(0)
+    {
 	  xx = gsl_vector_alloc(phi_dim);
 	}
 	Input(const Input<STATE,ACTION,fctFEATURE>& cp) 
-	  : xx(0), phi(cp.phi), phi_dim(cp.phi_dim), size(cp.size) {
+	  : xx(0), phi(cp.phi), phi_dim(cp.phi_dim), size(cp.size)
+    {
 	  xx = gsl_vector_alloc(cp.xx->size);
 	  gsl_vector_memcpy(xx,cp.xx);
 	}
 
-	Input<STATE,ACTION,fctFEATURE> operator=(const Input<STATE,ACTION,fctFEATURE>& cp) {
-	  if(this != &cp) {
+	Input<STATE,ACTION,fctFEATURE> operator=(const Input<STATE,ACTION,fctFEATURE>& cp)
+    {
+	  if(this != &cp)
+      {
 	    phi = cp.phi;
 	    phi_dim = cp.phi_dim;
 	    gsl_vector_free(xx);
@@ -125,37 +128,40 @@ namespace rl {
 	  return this;
 	}
 
-	~Input(void) {gsl_vector_free(xx);}
+	~Input()
+    {
+        gsl_vector_free(xx);
+    }
 
-	void operator()(const gsl_vector* theta, 
-			const state_type& s, const action_type& a,
-			double* y) const {
-	  unsigned int i;
+	void operator()(const gsl_vector* theta, const state_type& s, const action_type& a, double* y) const
+    {
 	  phi(xx,s,a);
-	  double* end = y+layerSize();
-	  double* iter;
-	  for(iter = y, i=0; iter != end; ++i,++iter) 
+	  double *iter = y, *end = y + layerSize();
+	  for (unsigned i = 0; iter != end; ++i, ++iter)
 	    *iter = gsl_vector_get(xx,i);
 	}
-      };
+}; // Input
 
-      template<typename STATE,
-	       typename ACTION,
-	       typename fctFEATURE> 
-      Input<STATE,ACTION,fctFEATURE> input(const fctFEATURE& f,unsigned int feature_dimension) {
+template <
+     typename STATE,
+     typename ACTION,
+     typename fctFEATURE> 
+Input<STATE,ACTION,fctFEATURE> input(const fctFEATURE& f, unsigned feature_dimension)
+{
 	return Input<STATE,ACTION,fctFEATURE>(f,feature_dimension);
-      }
+}
 
-      /**
-       * @short This defines the some hidden layer of the neural network.
-       */
-      template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
-      class Hidden {
-      private:
+/**
+ * @short This defines the some hidden layer of the neural network.
+ */
+template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
+class Hidden
+{
+private:
 	unsigned int layer_size;
 	mutable std::vector<double> yy;
 
-      public:
+public:
 	typedef typename PREVIOUS_LAYER::state_type  state_type;
 	typedef typename PREVIOUS_LAYER::action_type action_type;
 
@@ -168,26 +174,28 @@ namespace rl {
 	unsigned int nbParams(void)     const {return layer_size*(1+input.layerSize());}
 	unsigned int layerSize(void)    const {return layer_size;}
 
-
-	void displayParameters(std::ostream& os) const {
+	void displayParameters(std::ostream& os) const
+    {
 	  input.displayParameters(os);
 	  os << "Hidden #" << std::setw(3) << rank()
 	     << " : " << "[" << std::setw(6) << minParamRank() << ", " << std::setw(6) << minParamRank()+nbParams() << "["
 	     << " : size = " << std::setw(4) << layerSize() << std::endl;
 	}
 
-	Hidden(PREVIOUS_LAYER& in,
-	       unsigned int nb_neurons,
-	       const MLP_TRANSFER& transfer) 
-	  : layer_size(nb_neurons), yy(), input(in), f(transfer) {
+	Hidden(PREVIOUS_LAYER& in, unsigned nb_neurons, const MLP_TRANSFER& transfer) 
+	  : layer_size(nb_neurons), yy(), input(in), f(transfer)
+    {
 	  size = minParamRank() + nbParams();
 	}
 
 	Hidden(const Hidden<PREVIOUS_LAYER,MLP_TRANSFER>& cp) 
-	  : layer_size(cp.layer_size), yy(cp.yy), input(cp.input), f(cp.f), size(cp.size) {}
+	  : layer_size(cp.layer_size), yy(cp.yy), input(cp.input), f(cp.f), size(cp.size)
+    {}
 
-	Hidden<PREVIOUS_LAYER,MLP_TRANSFER>& operator=(const Hidden<PREVIOUS_LAYER,MLP_TRANSFER>& cp) {
-	  if(this != &cp) {
+	Hidden<PREVIOUS_LAYER,MLP_TRANSFER>& operator=(const Hidden<PREVIOUS_LAYER,MLP_TRANSFER>& cp)
+    {
+	  if (this != &cp)
+      {
 	    layer_size = cp.layer_size; 
 	    yy = cp.yy; 
 	    input = cp.input;
@@ -197,47 +205,41 @@ namespace rl {
 	  return *this;
 	}
 
-	void operator()(const gsl_vector* theta,
-			const state_type& s, const action_type& a,
-			double* y) const {
-	  unsigned int k;
-	  double sum;
-
+	void operator()(const gsl_vector *theta, const state_type &s, const action_type &a, double *y) const
+    {
 	  yy.resize(input.layerSize());
 	  input(theta,s,a,&(*(yy.begin())));
 
-	  typename std::vector<double>::const_iterator j,yyend;
-	  double* i;
+	  typename std::vector<double>::const_iterator j, yyend;
 	  double* yend = y+layerSize();
 
-	  k=minParamRank();
+      unsigned k = minParamRank();
 	  yyend = yy.end();
-	  for(i=y;i!=yend;++i) {
-	    sum = gsl_vector_get(theta,k);++k;
+	  for(double *i = y; i != yend; ++i)
+      {
+          double sum = gsl_vector_get(theta,k);++k;
 	    for(j=yy.begin();j!=yyend;++j,++k)
 	      sum += gsl_vector_get(theta,k)*(*j);
 	    *i = f(sum);
 	  }
 	}
-      };
+}; // Hidden
 
-      template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
-      Hidden<PREVIOUS_LAYER,MLP_TRANSFER> hidden(PREVIOUS_LAYER& in,
-						 unsigned int layer_size,
-						 const MLP_TRANSFER& transfer) {
+template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
+Hidden<PREVIOUS_LAYER,MLP_TRANSFER> hidden(PREVIOUS_LAYER& in, unsigned layer_size, const MLP_TRANSFER& transfer)
+{
 	return Hidden<PREVIOUS_LAYER,MLP_TRANSFER>(in,layer_size,transfer);
-      }
+}
 
-      /**
-       * @short This defines the output layer of the neural network.
-       */
-      template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
-      class Output {
-      private:
+/**
+ * @short This defines the output layer of the neural network.
+ */
+template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
+class Output 
+{
+private:
 	mutable std::vector<double> y;
-      public:
-
-	
+public:
 	typedef typename PREVIOUS_LAYER::state_type  state_type;
 	typedef typename PREVIOUS_LAYER::action_type action_type;
 
@@ -247,26 +249,31 @@ namespace rl {
 	unsigned int layerSize(void)    const {return 1;}
 	
 	PREVIOUS_LAYER& input;
-	std::function<double (double)> f;
+	std::function<double(double)> f;
 	unsigned int size;
 	
-
-	void displayParameters(std::ostream& os) const {
+	void displayParameters(std::ostream& os) const
+    {
 	  input.displayParameters(os);
 	  os << "Output #" << std::setw(3) << rank()
 	     << " : " << "[" << std::setw(6) << minParamRank() << ", " << std::setw(6) << minParamRank()+nbParams() << "["
 	     << " : size = " << std::setw(4) << layerSize() << std::endl;
 	}
 
-	Output(PREVIOUS_LAYER& in,
-	       /*const*/ MLP_TRANSFER& transfer) 
-	  : y(),input(in), f(transfer) {
+	Output(PREVIOUS_LAYER& in, const MLP_TRANSFER& transfer) 
+	  : y(),input(in), f(transfer)
+    {
 	  size = minParamRank() + nbParams();
 	}
+
 	Output(const Output<PREVIOUS_LAYER,MLP_TRANSFER>& cp)
-	  : y(cp.y), input(cp.input), f(cp.f), size(cp.size) {}
-	Output<PREVIOUS_LAYER,MLP_TRANSFER>& operator=(const Output<PREVIOUS_LAYER,MLP_TRANSFER>& cp) {
-	  if(this != &cp) {
+	  : y(cp.y), input(cp.input), f(cp.f), size(cp.size)
+    {}
+
+	Output<PREVIOUS_LAYER,MLP_TRANSFER>& operator=(const Output<PREVIOUS_LAYER,MLP_TRANSFER>& cp)
+    {
+	  if (this != &cp)
+      {
 	    y = cp.y; 
 	    input = cp.input;
 	    f = cp.f;
@@ -275,32 +282,28 @@ namespace rl {
 	  return *this;
 	}
 
-
-	double operator()(const gsl_vector* theta, const state_type& s, const action_type& a) const {
-	  unsigned int k;
-	  double sum;
-	  
+	double operator()(const gsl_vector* theta, const state_type& s, const action_type& a) const
+    {
 	  y.resize(input.layerSize());
+	  input(theta, s, a, &(*(y.begin())));
 
-	  input(theta,s,a,&(*(y.begin())));
+	  typename std::vector<double>::const_iterator j, yend;
 
-	  typename std::vector<double>::const_iterator j,yend;
-
-	  k=minParamRank();
+      unsigned k = minParamRank();
 	  yend = y.end();
-	  sum = gsl_vector_get(theta,k);++k;
+      double sum = gsl_vector_get(theta,k);++k;
 	  for(j=y.begin();j!=yend;++j,++k)
 	    sum += gsl_vector_get(theta,k)*(*j);
 	  return f(sum);
 	}
-      };
+}; // Output
 
-      template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
-      Output<PREVIOUS_LAYER,MLP_TRANSFER> output(PREVIOUS_LAYER& in,
-						 const MLP_TRANSFER& transfer) {
+template<typename PREVIOUS_LAYER,typename MLP_TRANSFER>
+Output<PREVIOUS_LAYER,MLP_TRANSFER> output(PREVIOUS_LAYER& in, const MLP_TRANSFER& transfer)
+{
 	return Output<PREVIOUS_LAYER,MLP_TRANSFER>(in,transfer);
-      }
-
-    }
-  }
 }
+
+} // mlp
+} // gsl
+} // rl

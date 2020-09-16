@@ -24,6 +24,7 @@
     <Platform>Win32</Platform>
     <ProjectName>packages</ProjectName>
     <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -301,6 +302,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <ItemGroup>
     <None Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\CMakeFiles\packages" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:\Users\favorart\Documents\Github\RLlib-4.0.0\bin\ZERO_CHECK.vcxproj">
@@ -310,5 +312,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\gsl-msvc-x86.2.4.0.8788\build\native\gsl-msvc-x86.targets" Condition="Exists('packages\gsl-msvc-x86.2.4.0.8788\build\native\gsl-msvc-x86.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\gsl-msvc-x86.2.4.0.8788\build\native\gsl-msvc-x86.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\gsl-msvc-x86.2.4.0.8788\build\native\gsl-msvc-x86.targets'))" />
+  </Target>
 </Project>
